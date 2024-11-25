@@ -1,4 +1,4 @@
-# Setup Harbor in Harbor
+# Setup Harbor in Docker
 <br>
 
 ```
