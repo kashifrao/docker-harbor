@@ -1,0 +1,33 @@
+
+    
+    - name: Install docker-compose
+      get_url: 
+        url: https://github.com/docker/compose/releases/download/v2.29.7/docker-compose-linux-x86_64 
+        dest: /usr/local/bin/docker-compose
+        mode: 'u+x,g+x'
+      become_user: root
+
+    - name: Install Dcoker Compose
+      command: sudo chmod +x /usr/local/bin/docker-compose
+      become_user: root
+
+    - name: Copy Harbor file
+      copy: src=/srv/shared-mgmt/external-softwares/harbor  dest=/usr/src/  mode=0755
+      become_user: root
+
+    - name: Change the directory
+      command: cd /usr/src/harbor
+
+    - name: Copy Harbor.yml file
+      copy:
+        src: "{{ansible_roles_path}}/files/harbor/harbor.yml"
+        dest: "/usr/src/harbor/"
+      become_user: root
+
+    - name: Run Install.sh
+      command: sudo sh /usr/src/harbor/install.sh
+      become_user: root
+
+    - name: Restart the harbor
+      command: sudo /usr/local/bin/docker-compose -f /usr/src/harbor/docker-compose.yml restart
+      become_user: root
